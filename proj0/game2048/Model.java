@@ -165,7 +165,7 @@ public class Model extends Observable {
                     // 如果已经触达搜索边界（棋盘顶端 或 紧邻上一个合并过的方块）
                     if (targetRow == mergeLimit - 1) {
                         // 移动到该空位
-                        board.move(side.col(col, targetRow, size), side.row(col, targetRow, size), currTile);
+                        board.move(col, targetRow, currTile);
                         changed = true;
                         break;
                     } else {
@@ -177,7 +177,7 @@ public class Model extends Observable {
                 // 上方有方块，且数值相同（触发合并）
                 if (currTile.value() == targetTile.value()) {
                     // 执行合并移动
-                    board.move(side.col(col, targetRow, size), side.row(col, targetRow, size), currTile);
+                    board.move(col, targetRow, currTile);
 
                     // 更新分数
                     score += currTile.value() * 2;
@@ -193,7 +193,7 @@ public class Model extends Observable {
                     // 将方块移动到障碍物的正下方
                     // 仅当目标位置不是当前位置时才移动
                     if (targetRow - 1 != row) {
-                        board.move(side.col(col, targetRow - 1, size), side.row(col, targetRow - 1, size), currTile);
+                        board.move(col, targetRow - 1, currTile);
                         changed = true;
                     }
                     break;
