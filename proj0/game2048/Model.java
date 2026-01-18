@@ -107,16 +107,98 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed;
-        changed = false;
+        boolean changed = false;
+        int size = board.size();
 
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
+        // 设置视角：将棋盘的逻辑方向调整为 side。
+        board.setViewingPerspective(side);
+
+        for (int col = 0; col < size; col++) {
+            // 如果某一列发生了移动或合并，则认为整个棋盘发生了改变
+            if (tiltOneCol(side, col)) {
+                changed = true;
+            }
+        }
+
+        // 操作结束后，务必将视角复位回标准的 NORTH 方向。
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
             setChanged();
+        }
+        return changed;
+    }
+
+    /**
+     * 处理单列的倾斜逻辑。
+     * 将方块移动到该列上方最远的空位，或者与上方数值相同的方块合并。
+     *
+     * @param side 当前的视角方向（用于辅助坐标转换）。
+     * @param col  当前处理的列索引（虚拟坐标）。
+     * @return 如果该列发生了移动或合并，返回 true。
+     */
+    public boolean tiltOneCol(Side side, int col) {
+        boolean changed = false;
+        int size = board.size();
+
+        // mergeLimit 用于记录本轮已经发生过合并的最高行索引。
+        // 作用：防止二次合并（例如 [2, 2, 4] 向上滑应该变成 [4, 4, null] 而不是 [8, null, null]）。
+        int mergeLimit = size;
+
+        // 从倒数第二行开始，自下而上遍历每一个方块
+        // (row = size - 1 是最顶行，它没法再往上移了，所以不用检查)
+        for (int row = size - 2; row >= 0; row--) {
+            Tile currTile = board.tile(col, row);
+
+            // 如果当前格子是空的，直接跳过
+            if (currTile == null) {
+                continue;
+            }
+
+            // 向上搜索最远的可移动位置
+            for (int targetRow = row + 1; targetRow < mergeLimit; targetRow++) {
+                Tile targetTile = board.tile(col, targetRow);
+
+                // 上方是空位
+                if (targetTile == null) {
+                    // 如果已经触达搜索边界（棋盘顶端 或 紧邻上一个合并过的方块）
+                    if (targetRow == mergeLimit - 1) {
+                        // 移动到该空位
+                        board.move(side.col(col, targetRow, size), side.row(col, targetRow, size), currTile);
+                        changed = true;
+                        break;
+                    } else {
+                        // 上方还是空的，继续往上看，寻找更远的位置
+                        continue;
+                    }
+                }
+
+                // 上方有方块，且数值相同（触发合并）
+                if (currTile.value() == targetTile.value()) {
+                    // 执行合并移动
+                    board.move(side.col(col, targetRow, size), side.row(col, targetRow, size), currTile);
+
+                    // 更新分数
+                    score += currTile.value() * 2;
+
+                    // 这一格刚刚合并过，接下来的方块不能再合并到这一格
+                    mergeLimit = targetRow;
+                    changed = true;
+                    break;
+                }
+
+                // 上方被不同数值的方块挡住（无法合并
+                else {
+                    // 将方块移动到障碍物的正下方
+                    // 仅当目标位置不是当前位置时才移动
+                    if (targetRow - 1 != row) {
+                        board.move(side.col(col, targetRow - 1, size), side.row(col, targetRow - 1, size), currTile);
+                        changed = true;
+                    }
+                    break;
+                }
+            }
         }
         return changed;
     }
@@ -138,6 +220,14 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        int bound = b.size();
+
+        for (int i = 0; i < bound; i++) {
+            for (int j = 0; j < bound; j++) {
+                if (b.tile(i, j) == null) return true;
+            }
+        }
+
         return false;
     }
 
@@ -148,6 +238,14 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        int bound = b.size();
+
+        for (int i = 0; i < bound; i++) {
+            for (int j = 0; j < bound; j++) {
+                if (b.tile(i, j) != null && b.tile(i, j).value() == MAX_PIECE) return true;
+            }
+        }
+
         return false;
     }
 
@@ -159,6 +257,23 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        int bound = b.size();
+
+        if (emptySpaceExists(b) || maxTileExists(b)) return true;
+
+        for (int row = 0; row < bound; row++) {
+            for (int col = 0; col < bound; col++){
+                int curr_val = b.tile(col, row).value();
+
+                if (row + 1 < bound) {
+                    if (curr_val == b.tile(col, row + 1).value()) return true;
+                }
+                if (col + 1 < bound) {
+                    if (curr_val == b.tile(col + 1, row).value()) return true;
+                }
+            }
+        }
+
         return false;
     }
 
