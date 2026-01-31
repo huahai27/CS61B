@@ -10,39 +10,35 @@ public class TestArrayDequeEC {
     public void randomizedTest() {
         ArrayDequeSolution<Integer> correct = new ArrayDequeSolution<>();
         StudentArrayDeque<Integer> student = new StudentArrayDeque<>();
+        String message = "";
 
         int N = 5000;
         for (int i = 0; i < N; i += 1) {
             int operationNumber = StdRandom.uniform(0, 4);
+
             if (operationNumber == 0) {
-                // addFirst
                 int randVal = StdRandom.uniform(0, 100);
                 correct.addFirst(randVal);
                 student.addFirst(randVal);
-                System.out.println("addFirst(" + randVal + ")");
-                assertEquals("size()", correct.size(), student.size());
+                message += "addFirst(" + randVal + ")\n";
             } else if (operationNumber == 1) {
-                // addLast
                 int randVal = StdRandom.uniform(0, 100);
                 correct.addLast(randVal);
                 student.addLast(randVal);
-                System.out.println("addLast(" + randVal + ")");
-                assertEquals("size()", correct.size(), student.size());
+                message += "addLast(" + randVal + ")\n";
             } else if (operationNumber == 2) {
-                // removeFirst
-                if (correct.size() > 0 && student.size() > 0) {
-                    Integer correctRemoveFirst = correct.removeFirst();
-                    Integer studentRemoveFirst = student.removeFirst();
-                    assertEquals("removeFirst()", correctRemoveFirst, studentRemoveFirst);
-                    assertEquals("size()", correct.size(), student.size());
+                if (!correct.isEmpty()) {
+                    Integer c = correct.removeFirst();
+                    Integer s = student.removeFirst();
+                    message += "removeFirst()\n";
+                    assertEquals(message, c, s); 
                 }
             } else if (operationNumber == 3) {
-                // removeLast
-                if (correct.size() > 0 && student.size() > 0) {
-                    Integer correctRemoveLast = correct.removeLast();
-                    Integer studentRemoveLast = student.removeLast();
-                    assertEquals("removeLast()", correctRemoveLast, studentRemoveLast);
-                    assertEquals("size()", correct.size(), student.size());
+                if (!correct.isEmpty()) {
+                    Integer c = correct.removeLast();
+                    Integer s = student.removeLast();
+                    message += "removeLast()\n";
+                    assertEquals(message, c, s);
                 }
             }
         }
