@@ -23,12 +23,12 @@ public class LinkedListDeque<T> implements Deque<T>{
         size = 0;
     }
 
-    public LinkedListDeque(T x) {
-        sentinel = new Node(null, null, null);
-        sentinel.next = new Node(x, sentinel, sentinel);
-        sentinel.prev = sentinel.next;
-        size = 1;
-    }
+//    public LinkedListDeque(T x) {
+//        sentinel = new Node(null, null, null);
+//        sentinel.next = new Node(x, sentinel, sentinel);
+//        sentinel.prev = sentinel.next;
+//        size = 1;
+//    }
 
     @Override
     public void addFirst(T item) {
