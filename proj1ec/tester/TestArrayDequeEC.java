@@ -31,13 +31,17 @@ public class TestArrayDequeEC {
             } else if (operationNumber == 2) {
                 // removeFirst
                 if (correct.size() > 0 && student.size() > 0) {
-                    assertEquals("removeFirst()", correct.removeFirst(), student.removeFirst());
+                    Integer correctRemoveFirst = correct.removeFirst();
+                    Integer studentRemoveFirst = student.removeFirst();
+                    assertEquals("removeFirst()", correctRemoveFirst, studentRemoveFirst);
                     assertEquals("size()", correct.size(), student.size());
                 }
             } else if (operationNumber == 3) {
                 // removeLast
                 if (correct.size() > 0 && student.size() > 0) {
-                    assertEquals("removeLast()", correct.removeLast(), student.removeLast());
+                    Integer correctRemoveLast = correct.removeLast();
+                    Integer studentRemoveLast = student.removeLast();
+                    assertEquals("removeLast()", correctRemoveLast, studentRemoveLast);
                     assertEquals("size()", correct.size(), student.size());
                 }
             }
