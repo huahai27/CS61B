@@ -31,7 +31,7 @@ public class TestArrayDequeEC {
                     Integer c = correct.removeFirst();
                     Integer s = student.removeFirst();
                     message += "removeFirst()\n";
-                    assertEquals(message, c, s); 
+                    assertEquals(message, c, s);
                 }
             } else if (operationNumber == 3) {
                 if (!correct.isEmpty()) {
