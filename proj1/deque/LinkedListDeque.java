@@ -197,7 +197,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         Node n = sentinel.next;
         for (int i = 0; i < size; i++) {
-            if (n.item.equals(other.get(i))) {
+            if (!java.util.Objects.equals(this.get(i), other.get(i))) {
                 return false;
             }
             n = n.next;

@@ -163,16 +163,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         // 满足跨类比较
-        if (!(o instanceof Deque)) {
+        if (!(o instanceof Deque<?>)) {
             return false;
         }
 
-        Deque<T> other = (Deque<T>) o;
+        Deque<?> other = (Deque<?>) o;
         if (this.size() != other.size()) {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (!this.get(i).equals(other.get(i))) {
+            if (!java.util.Objects.equals(this.get(i), other.get(i))) {
                 return false;
             }
         }
