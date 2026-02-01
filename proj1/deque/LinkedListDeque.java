@@ -2,11 +2,11 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private class Node {
-        public T item;
-        public Node prev;
-        public Node next;
+        private T item;
+        private Node prev;
+        private Node next;
 
         public Node(T i, Node p, Node n) {
             item = i;
@@ -61,7 +61,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     @Override
     public void printDeque() {
         Node n = sentinel.next;
-        while (n.next != sentinel.next) {
+        while (n != sentinel) {
             System.out.print(n.item + " ");
             n = n.next;
         }
@@ -69,7 +69,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public T removeFirst() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         Node remove = sentinel.next;
         T item = remove.item;
         Node newFirst = remove.next;
@@ -84,7 +86,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public T removeLast() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         Node remove = sentinel.prev;
         T item = remove.item;
         Node newLast = remove.prev;
@@ -144,7 +148,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     private class LinkedListDequeIterator implements Iterator<T> {
         private Node cursor;
 
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             cursor = sentinel.next;
         }
 
@@ -161,10 +165,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
         }
     }
 
-    public boolean contains(T item) {
+    private boolean contains(T item) {
         Node n = sentinel.next;
         while (n != sentinel) {
-            if (n.item == item) return true;
+            if (n.item == item) {
+                return true;
+            }
+            n = n.next;
         }
         return false;
     }
@@ -173,13 +180,28 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     public boolean equals(Object o) {
         // cs61b 2026
         // if (o instanceof LinkedListDeque uddalld)
-        if (o == null) return false;
-        if (this.getClass() != o.getClass()) return false;
-        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
-        for (T item : this) {
-            if (!other.contains(item)) return false;
+        if (this == o) {
+            return true;
         }
-
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof LinkedListDeque)) {
+            return false;
+        }
+        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
+        if (this.size() != other.size()) {
+            return false;
+        }
+        Node n1 = sentinel.next;
+        Node n2 = other.sentinel.next;
+        while (n1 != sentinel && n2 != sentinel) {
+            if (!n1.item.equals(n2)) {
+                return false;
+            }
+            n1 = n1.next;
+            n2 = n2.next;
+        }
         return true;
     }
 }
