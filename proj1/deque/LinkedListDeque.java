@@ -1,6 +1,8 @@
 package deque;
 
-public class LinkedListDeque<T> implements Deque<T>{
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     private class Node {
         public T item;
         public Node prev;
@@ -46,10 +48,10 @@ public class LinkedListDeque<T> implements Deque<T>{
         size += 1;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
+//    @Override
+//    public boolean isEmpty() {
+//        return size == 0;
+//    }
 
     @Override
     public int size() {
@@ -132,5 +134,52 @@ public class LinkedListDeque<T> implements Deque<T>{
             Node n = sentinel.next;
             return getRecursiveHelper(n, index);
         }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private Node cursor;
+
+        public LinkedListDequeIterator() {
+            cursor = sentinel.next;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor != sentinel;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = cursor.item;
+            cursor = cursor.next;
+            return returnItem;
+        }
+    }
+
+    public boolean contains(T item) {
+        Node n = sentinel.next;
+        while (n != sentinel) {
+            if (n.item == item) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // cs61b 2026
+        // if (o instanceof LinkedListDeque uddalld)
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
+        for (T item : this) {
+            if (!other.contains(item)) return false;
+        }
+
+        return true;
     }
 }

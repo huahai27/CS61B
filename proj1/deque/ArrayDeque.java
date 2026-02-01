@@ -1,10 +1,12 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque<T> {
-    private T[] items;
-    private int size;
-    private int nextFirst;
-    private int nextLast;
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
+    protected T[] items;
+    protected int size;
+    protected int nextFirst;
+    protected int nextLast;
 
     public ArrayDeque() {
         items = (T[]) new Object[100];
@@ -49,10 +51,10 @@ public class ArrayDeque<T> implements Deque<T> {
         size++;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
+//    @Override
+//    public boolean isEmpty() {
+//        return size == 0;
+//    }
 
     @Override
     public int size() {
@@ -108,5 +110,51 @@ public class ArrayDeque<T> implements Deque<T> {
             T item = items[cursor];
             return item;
         }
+    }
+
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int cursor;
+
+        public ArrayDequeIterator() {
+            cursor = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < size;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = items[cursor];
+            cursor++;
+            return  returnItem;
+        }
+    }
+
+    public boolean contains(T item) {
+        for (T x : this) {
+            if (x == item) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // cs61b 2026
+        // if (o instanceof ArrayDeque uddaad)
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        for (T item : this) {
+            if (!other.contains(item)) return false;
+        }
+
+        return true;
     }
 }
