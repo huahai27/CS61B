@@ -3,16 +3,16 @@ package deque;
 import java.util.Iterator;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
-    protected T[] items;
-    protected int size;
-    protected int nextFirst;
-    protected int nextLast;
+    private T[] items;
+    private int size;
+    private int nextFirst;
+    private int nextLast;
 
     public ArrayDeque() {
-        items = (T[]) new Object[100];
+        items = (T[]) new Object[8];
         size = 0;
-        nextFirst = 20;
-        nextLast = 21;
+        nextFirst = 4;
+        nextLast = 5;
     }
 
     private int proceed(int index) {
@@ -162,10 +162,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null) {
             return false;
         }
-        if (this.getClass() != o.getClass()) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
+
+        Deque<T> other = (Deque<T>) o;
         if (this.size() != other.size()) {
             return false;
         }
@@ -174,7 +175,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             }
         }
-
         return true;
     }
 }

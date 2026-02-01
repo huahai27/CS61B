@@ -3,7 +3,7 @@ package deque;
 import java.util.Comparator;
 
 public class MaxArrayDeque<T> extends ArrayDeque<T> {
-    private Comparator cmp;
+    private Comparator<T> cmp;
 
     public MaxArrayDeque(Comparator<T> c) {
         super();
@@ -12,30 +12,18 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
     }
 
     public T max() {
-        if (size == 0) return null;
-        int index = nextFirst + 1;
-        T max = items[index++];
-        while (index < nextLast) {
-            if (index >= items.length) index = 0;
-            if (cmp.compare(items[index], max) > 0) {
-                max = items[index];
-            }
-            index++;
-        }
-
-        return max;
+        return max(cmp);
     }
 
     public T max(Comparator<T> c) {
-        if (size == 0) return null;
-        int index = nextFirst + 1;
-        T max = items[index++];
-        while (index < nextLast) {
-            if (index >= items.length) index = 0;
-            if (c.compare(items[index], max) > 0) {
-                max = items[index];
+        if (size() == 0) return null;
+
+        T max = get(0);
+        for (int i = 1; i < size(); i++) {
+            T current = get(i);
+            if (cmp.compare(current, max) > 0) {
+                max = current;
             }
-            index++;
         }
 
         return max;
