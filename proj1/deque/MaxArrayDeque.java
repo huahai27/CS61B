@@ -12,11 +12,13 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
     }
 
     public T max() {
-        return max(cmp);
+        return max(this.cmp);
     }
 
     public T max(Comparator<T> c) {
-        if (size() == 0) return null;
+        if (size() == 0) {
+            return null;
+        }
 
         T max = get(0);
         for (int i = 1; i < size(); i++) {

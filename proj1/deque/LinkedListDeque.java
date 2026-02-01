@@ -8,7 +8,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         private Node prev;
         private Node next;
 
-        public Node(T i, Node p, Node n) {
+        Node(T i, Node p, Node n) {
             item = i;
             prev = p;
             next = n;
@@ -186,21 +186,23 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null) {
             return false;
         }
-        // 跨类比较
+        // 满足跨类比较
         if (!(o instanceof Deque)) {
             return false;
         }
-
         Deque<T> other = (Deque<T>) o;
         if (this.size() != other.size()) {
             return false;
         }
+
         Node n = sentinel.next;
         for (int i = 0; i < size; i++) {
-            if (!n.item.equals(other.get(i))) {
+            if (n.item.equals(other.get(i))) {
                 return false;
             }
+            n = n.next;
         }
+
         return true;
     }
 }

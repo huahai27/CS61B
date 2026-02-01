@@ -9,7 +9,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int nextLast;
 
     public ArrayDeque() {
-        items = (T[]) new Object[8];
+        items = (T[]) new Object[8]; // 别设太大
         size = 0;
         nextFirst = 4;
         nextLast = 5;
@@ -162,6 +162,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null) {
             return false;
         }
+        // 满足跨类比较
         if (!(o instanceof Deque)) {
             return false;
         }
@@ -175,6 +176,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             }
         }
+
         return true;
     }
 }
