@@ -13,7 +13,7 @@ public class GuitarString {
     private static final double DECAY = .996; // energy decay factor
 
     /* Buffer for storing sound data. */
-     private Deque<Double> buffer;
+    private Deque<Double> buffer;
 
     /* Create a guitar string of the given frequency.  */
     public GuitarString(double frequency) {
@@ -34,7 +34,7 @@ public class GuitarString {
         // Dequeue everything in buffer, and replace with random numbers
         // between -0.5 and 0.5. You can get such a number by using:
         // double r = Math.random() - 0.5;
-        for (int i = 0 ; i < buffer.size(); i++) {
+        for (int i = 0; i < buffer.size(); i++) {
             double r = Math.random() - 0.5;
             buffer.removeFirst();
             buffer.addLast(r);
