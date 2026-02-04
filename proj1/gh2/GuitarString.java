@@ -1,9 +1,8 @@
 package gh2;
 
 
- import deque.Deque;
+import deque.Deque;
 import deque.ArrayDeque;
- import org.checkerframework.checker.units.qual.A;
 
 //Note: This file will not compile until you complete the Deque implementations
 public class GuitarString {
